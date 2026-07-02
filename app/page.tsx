@@ -1,4 +1,7 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
+import TheatreSplash from "@/components/TheatreSplash";
 import Hero from "@/components/Hero";
 import TheaterIcons from "@/components/TheaterIcons";
 import LegacyVision from "@/components/LegacyVision";
@@ -10,10 +13,16 @@ import {
   visionFeatures,
   visionTiles,
 } from "@/lib/data";
+import { useState } from "react";
 
 export default function Home() {
+  const [ready] = useState(true);
   return (
-    <>
+    <TheatreSplash
+      ready={ready}
+      minDurationMs={3200}
+      onComplete={() => console.log("Curtains up.")}
+    >
       <Navbar />
       <main className="flex-1">
         <Hero story={featuredStory} />
@@ -22,6 +31,6 @@ export default function Home() {
         <TheatricalVisions tiles={visionTiles} />
       </main>
       <Footer />
-    </>
+    </TheatreSplash>
   );
 }
