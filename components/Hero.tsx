@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { IconPlay } from "./icons";
 import type { FeaturedStory } from "@/lib/types";
 
@@ -26,29 +29,73 @@ export default function Hero({ story }: { story: FeaturedStory }) {
 
         {/* Content */}
         <div className="relative z-10 mx-auto flex h-full max-w-7xl items-end px-4 pb-14 sm:px-6 lg:items-center lg:justify-end lg:px-8 lg:pb-0">
-          <div className="max-w-xl text-right">
-            <p className="mb-3 font-display text-sm font-bold tracking-wide text-gold">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.15 } },
+            }}
+            className="max-w-xl text-right"
+          >
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="mb-3 font-display text-sm font-bold tracking-wide text-gold"
+            >
               {story.eyebrow}
-            </p>
-            <h1 className="text-balance font-display text-3xl font-extrabold leading-tight text-foreground sm:text-4xl lg:text-[2.75rem]">
+            </motion.p>
+            <motion.h1
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="text-balance font-display text-3xl font-extrabold leading-tight text-foreground sm:text-4xl lg:text-[2.75rem]"
+            >
               {story.titleLine1}
               <br />
               <span className="text-gold-soft">{story.titleLine2}</span>
-            </h1>
-            <p className="mt-5 text-balance text-[15px] leading-8 text-muted">
+            </motion.h1>
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+              className="mt-5 text-balance text-[15px] leading-8 text-muted"
+            >
               {story.description}
-            </p>
+            </motion.p>
 
-            <div className="mt-8 flex items-center justify-end gap-3">
-              <button className="rounded-lg border border-surface-border bg-transparent px-6 py-3 text-sm font-bold text-foreground transition-colors hover:border-gold-dim hover:bg-surface cursor-pointer">
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+              className="mt-8 flex items-center justify-end gap-3"
+            >
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="rounded-lg border border-surface-border bg-transparent px-6 py-3 text-sm font-bold text-foreground transition-colors hover:border-gold-dim hover:bg-surface cursor-pointer"
+              >
                 {story.primaryCta}
-              </button>
-              <button className="inline-flex items-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-[#1a1206] transition-colors hover:bg-gold-soft cursor-pointer">
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-[#1a1206] transition-colors hover:bg-gold-soft cursor-pointer"
+              >
                 <IconPlay className="h-4 w-4" />
                 {story.secondaryCta}
-              </button>
-            </div>
-          </div>
+              </motion.button>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

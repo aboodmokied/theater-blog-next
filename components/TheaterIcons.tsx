@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import SectionHeader from "./SectionHeader";
 import { IconEye, IconPlay } from "./icons";
 import type { VideoCard } from "@/lib/types";
@@ -45,12 +48,30 @@ export default function TheaterIcons({ items }: { items: VideoCard[] }) {
         subtitle="أبرز الأعمال المسرحية التي شكلت وجدان المشاهد الكويتي"
       />
 
-      <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.08 } },
+        }}
+        className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4"
+      >
         {items.map((item, i) => (
-          <article key={item.id} className="group cursor-pointer">
+          <motion.article
+            key={item.id}
+            variants={{
+              hidden: { opacity: 0, y: 24 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="group cursor-pointer"
+          >
             <div className="relative">
               <VideoThumb tone={item.tone} index={i} />
-              <span className="absolute bottom-2 left-2 rounded-md bg-black/70 px-1.5 py-0.5 font-display text-[11px] font-bold text-white">
+              <span className="absolute bottom-2 right-2 rounded-md bg-black/70 px-1.5 py-0.5 font-display text-[11px] font-bold text-white">
                 {item.duration}
               </span>
             </div>
@@ -64,9 +85,9 @@ export default function TheaterIcons({ items }: { items: VideoCard[] }) {
               </span>
               <span>{item.timeAgo}</span>
             </div>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

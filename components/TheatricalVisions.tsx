@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import SectionHeader from "./SectionHeader";
 import { IconMasks, IconPlay } from "./icons";
 import type { VisionTile } from "@/lib/types";
@@ -10,12 +13,27 @@ export default function TheatricalVisions({ tiles }: { tiles: VisionTile[] }) {
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <SectionHeader title="رؤى مسرحية" align="center" />
 
-      <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.1 } },
+        }}
+        className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3 lg:gap-6"
+      >
         {/* Two stacked small tiles */}
         <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:col-span-1 lg:grid-cols-1 lg:gap-6">
           {small.map((tile, i) => (
-            <article
+            <motion.article
               key={tile.id}
+              variants={{
+                hidden: { opacity: 0, y: 24 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
               className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-2xl lg:aspect-auto lg:h-full lg:min-h-[150px]"
               style={{
                 background:
@@ -44,13 +62,19 @@ export default function TheatricalVisions({ tiles }: { tiles: VisionTile[] }) {
                   {tile.description}
                 </p>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
 
         {/* Large featured tile */}
         {large && (
-          <article
+          <motion.article
+            variants={{
+              hidden: { opacity: 0, y: 24 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="group relative col-span-1 aspect-[16/10] cursor-pointer overflow-hidden rounded-2xl lg:col-span-2 lg:aspect-auto lg:min-h-[320px]"
             style={{
               background:
@@ -65,7 +89,7 @@ export default function TheatricalVisions({ tiles }: { tiles: VisionTile[] }) {
               }}
             />
             {/* faux control-room grid, echoing "behind the scenes" monitors */}
-            <div className="absolute left-6 top-6 hidden grid-cols-3 gap-1.5 sm:grid">
+            <div className="absolute right-6 top-6 hidden grid-cols-3 gap-1.5 sm:grid">
               {Array.from({ length: 6 }).map((_, idx) => (
                 <div
                   key={idx}
@@ -75,7 +99,7 @@ export default function TheatricalVisions({ tiles }: { tiles: VisionTile[] }) {
             </div>
 
             {large.badge && (
-              <span className="absolute left-5 top-5 rounded-full bg-gold px-3 py-1 text-xs font-bold text-[#1a1206]">
+              <span className="absolute right-5 top-5 rounded-full bg-gold px-3 py-1 text-xs font-bold text-[#1a1206]">
                 {large.badge}
               </span>
             )}
@@ -98,9 +122,9 @@ export default function TheatricalVisions({ tiles }: { tiles: VisionTile[] }) {
                 )}
               </div>
             </div>
-          </article>
+          </motion.article>
         )}
-      </div>
+      </motion.div>
     </section>
   );
 }

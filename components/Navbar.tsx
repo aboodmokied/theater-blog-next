@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { IconBell, IconSearch, IconSettings } from "./icons";
 
 const NAV_LINKS = [
@@ -15,7 +16,12 @@ export default function Navbar() {
   const [active, setActive] = useState("majlis");
 
   return (
-    <header className="sticky top-0 z-50 border-b border-surface-border/80 bg-background/85 backdrop-blur-md">
+    <motion.header
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="sticky top-0 z-50 border-b border-surface-border/80 bg-background/85 backdrop-blur-md"
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Right cluster in RTL visual order: brand */}
         <a
@@ -71,6 +77,6 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
