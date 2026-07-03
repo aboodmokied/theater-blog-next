@@ -17,10 +17,11 @@ import { useState } from "react";
 
 export default function Home() {
   const [ready] = useState(true);
+
   return (
     <TheatreSplash
       ready={ready}
-      minDurationMs={3200}
+      minDurationMs={1500} // ◄ تم تقليل الزمن هنا إلى ثانية ونصف
       onComplete={() => console.log("Curtains up.")}
     >
       <Navbar />

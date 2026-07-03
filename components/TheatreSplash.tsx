@@ -88,41 +88,46 @@ export default function TheatreSplash({
   const prefersReducedMotion = useReducedMotion();
   const lights = useMemo(buildLights, []);
 
+  // توحيد الحالة الابتدائية لمنع تعارض السيرفر والمتصفح (Hydration Error)
   const [skip, setSkip] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const [phase, setPhase] = useState<Phase>("loading");
   const [showSkipBtn, setShowSkipBtn] = useState(false);
 
+  // التحقق الآمن عند تحميل المكون في المتصفح لأول مرة
   useEffect(() => {
+    setIsClient(true);
     if (once && typeof window !== "undefined") {
       if (sessionStorage.getItem("theatre-splash-seen") === "1") {
         setSkip(true);
+        setPhase("done"); // إنهاء المرحلة فوراً لمنع الوميض عند الـ Reload
       }
     }
   }, [once]);
 
   useEffect(() => {
-    if (skip) return;
+    if (!isClient || skip) return;
     const t = setTimeout(() => setTimerDone(true), minDurationMs);
     const skipT = setTimeout(() => setShowSkipBtn(true), 1000);
     return () => {
       clearTimeout(t);
       clearTimeout(skipT);
     };
-  }, [minDurationMs, skip]);
+  }, [minDurationMs, skip, isClient]);
 
   useEffect(() => {
-    if (skip) return;
+    if (!isClient || skip) return;
     if (timerDone && ready && phase === "loading") {
       setPhase("opening");
     }
-  }, [timerDone, ready, phase, skip]);
+  }, [timerDone, ready, phase, skip, isClient]);
 
   useEffect(() => {
-    if (skip && typeof window !== "undefined") {
+    if (isClient && skip && typeof window !== "undefined") {
       onComplete?.();
     }
-  }, [skip, onComplete]);
+  }, [skip, onComplete, isClient]);
 
   const handleCurtainsOpen = () => {
     if (typeof window !== "undefined" && once) {
@@ -137,11 +142,12 @@ export default function TheatreSplash({
     setPhase("opening");
   };
 
-  // تعديل الـ Ease ليكون أسرع في البداية ثم يتباطأ بنعومة (التأثير الفيزيائي لفتح القماش المربوط)
   const curtainEase: [number, number, number, number] = [0.25, 1, 0.5, 1];
-  const showSplash = !skip && phase !== "done";
-  const curtainsMoving = phase === "opening";
-  const isDimmed = phase === "loading";
+
+  // حساب حالات العرض بناءً على بيئة التشغيل المستقرة
+  const showSplash = isClient && !skip && phase !== "done";
+  const curtainsMoving = isClient && phase === "opening";
+  const isDimmed = !isClient || phase === "loading";
 
   const dustParticles = useMemo(() => {
     const rng = (i: number): number => ((i * 16807) % 2147483647) / 2147483647;
@@ -163,8 +169,8 @@ export default function TheatreSplash({
       <div
         className="relative z-0"
         style={{
-          filter: `brightness(${skip || !isDimmed ? 1 : 0.15}) blur(${skip || !isDimmed ? 0 : 1}px)`,
-          transform: `scale(${skip || !isDimmed ? 1 : 1.03})`,
+          filter: `brightness(${!isDimmed ? 1 : 0.15}) blur(${!isDimmed ? 0 : 1}px)`,
+          transform: `scale(${!isDimmed ? 1 : 1.03})`,
           transformOrigin: "center center",
           transition: prefersReducedMotion
             ? "none"
@@ -293,12 +299,10 @@ export default function TheatreSplash({
               ))}
             </div>
 
-            {/* ――――――――――――――――――――――――――――――――――――――――― */}
-            {/* 5. الستارة اليسرى المعدلة لتنكمش باتجاه اليسار */}
-            {/* ――――――――――――――――――――――――――――――――――――――――― */}
+            {/* 5. Left Curtain */}
             <motion.div
               aria-hidden
-              className="absolute inset-y-0 left-0 origin-left" // تم تغيير الـ origin إلى اليسار ليحدث الانكماش هناك
+              className="absolute inset-y-0 left-0 origin-left"
               style={{
                 width: "51%",
                 background:
@@ -309,12 +313,11 @@ export default function TheatreSplash({
               }}
               initial={{ x: "0%", scaleX: 1 }}
               animate={{
-                // الستارة تنزلق وتصغر أفقياً بنسبة كبيرة جداً لتظهر كأنها تجمعت (قماش مكشكش)
                 x: curtainsMoving ? "-20%" : "0%",
                 scaleX: curtainsMoving ? 0.08 : 1,
               }}
               transition={{
-                duration: prefersReducedMotion ? 0.6 : 2.2, // زيادة الوقت قليلاً لتبدو حركة الستارة ثقيلة وواقعية
+                duration: prefersReducedMotion ? 0.6 : 2.2,
                 ease: curtainEase,
               }}
               onAnimationComplete={() => {
@@ -339,12 +342,10 @@ export default function TheatreSplash({
               />
             </motion.div>
 
-            {/* ――――――――――――――――――――――――――――――――――――――――― */}
-            {/* 6. الستارة اليمنى المعدلة لتنكمش باتجاه اليمين */}
-            {/* ――――――――――――――――――――――――――――――――――――――――― */}
+            {/* 6. Right Curtain */}
             <motion.div
               aria-hidden
-              className="absolute inset-y-0 right-0 origin-right" // تم تغيير الـ origin إلى اليمين
+              className="absolute inset-y-0 right-0 origin-right"
               style={{
                 width: "51%",
                 background:
