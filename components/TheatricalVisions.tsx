@@ -5,7 +5,26 @@ import SectionHeader from "./SectionHeader";
 import { IconMasks, IconPlay } from "./icons";
 import type { VisionTile } from "@/lib/types";
 
-export default function TheatricalVisions({ tiles }: { tiles: VisionTile[] }) {
+function TheatricalVisionsSkeleton() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <SectionHeader title="رؤى مسرحية" align="center" />
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+        <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:col-span-1 lg:grid-cols-1 lg:gap-6">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="aspect-[4/3] animate-pulse rounded-2xl bg-white/5 lg:aspect-auto lg:min-h-[150px]" />
+          ))}
+        </div>
+        <div className="col-span-1 aspect-[16/10] animate-pulse rounded-2xl bg-white/5 lg:col-span-2 lg:min-h-[320px]" />
+      </div>
+    </section>
+  );
+}
+
+export default function TheatricalVisions({ tiles, loading }: { tiles: VisionTile[]; loading?: boolean }) {
+  if (loading) return <TheatricalVisionsSkeleton />;
+  if (!tiles.length) return null;
+
   const small = tiles.filter((t) => t.size === "small");
   const large = tiles.find((t) => t.size === "large");
 

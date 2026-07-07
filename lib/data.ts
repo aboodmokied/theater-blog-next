@@ -1,8 +1,4 @@
-import type { FeaturedStory, VideoCard, VisionFeature, VisionTile } from "./types";
-
-// NOTE: This file simulates the shape of data that will later come from an API.
-// Swap the exported consts below for `fetch()` calls against your endpoints —
-// component props are already typed to match.
+import type { FeaturedStory, VisionFeature, VisionTile } from "./types";
 
 export const featuredStory: FeaturedStory = {
   id: "mohammed-ghloum-50-years",
@@ -14,41 +10,6 @@ export const featuredStory: FeaturedStory = {
   primaryCta: "التفاصيل",
   secondaryCta: "شاهد الآن",
 };
-
-export const theaterIcons: VideoCard[] = [
-  {
-    id: "greatest-play",
-    title: "المسرحية الأكبر في التاريخ",
-    duration: "١:٤٦:٣٣",
-    timeAgo: "منذ ٨ أشهر",
-    views: "١٣١K",
-    tone: "neutral",
-  },
-  {
-    id: "leila-wal-nadeeb",
-    title: "ليلى والنديب - رؤية نقدية",
-    duration: "٣٢:١٥",
-    timeAgo: "منذ ٧ أشهر",
-    views: "٢٦K",
-    tone: "neutral",
-  },
-  {
-    id: "unique-debut",
-    title: "الأول من نوعه - تحليل",
-    duration: "١٢:٣٩",
-    timeAgo: "منذ ٥ أشهر",
-    views: "٣٢K",
-    tone: "gold",
-  },
-  {
-    id: "salih-son",
-    title: "لأنه غاتم الصالح",
-    duration: "١٤:١٩",
-    timeAgo: "منذ شهر",
-    views: "٦٧K",
-    tone: "neutral",
-  },
-];
 
 export const visionFeatures: VisionFeature[] = [
   {

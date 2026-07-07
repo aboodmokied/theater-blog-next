@@ -3,21 +3,21 @@
 import { motion } from "framer-motion";
 import SectionHeader from "./SectionHeader";
 import { IconEye, IconPlay } from "./icons";
-import type { VideoCard } from "@/lib/types";
+import type { Post } from "@/lib/types";
 
-function VideoThumb({ tone, index }: { tone: VideoCard["tone"]; index: number }) {
-  // Placeholder art standing in for real thumbnails until the API is wired up.
-  const palettes = [
-    "linear-gradient(160deg,#2a2118,#0e0d0c)",
-    "linear-gradient(160deg,#20242c,#0b0c0f)",
-    "linear-gradient(160deg,#241a1c,#0d0b0c)",
-    "linear-gradient(160deg,#1c2320,#0b0d0c)",
-  ];
+function dummyThumbUrl(seed: number | string): string {
+  return `https://picsum.photos/seed/${seed}/640/360`;
+}
+
+function VideoThumb({ item, index }: { item: Post; index: number }) {
+  const thumbnail = item.media?.find((m) => m.type === "image" || m.type === "thumbnail");
   return (
-    <div
-      className="relative aspect-video w-full overflow-hidden rounded-xl"
-      style={{ background: palettes[index % palettes.length] }}
-    >
+    <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+      <img
+        src={thumbnail ? thumbnail.url : dummyThumbUrl(item.id)}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover"
+      />
       <div
         className="absolute inset-0 opacity-80"
         style={{
@@ -28,7 +28,7 @@ function VideoThumb({ tone, index }: { tone: VideoCard["tone"]; index: number })
       <div className="absolute inset-0 grid place-items-center">
         <span
           className={`grid size-11 place-items-center rounded-full backdrop-blur-sm transition-transform group-hover:scale-105 ${
-            tone === "gold"
+            item.tone && item.tone === "gold"
               ? "bg-gold text-[#1a1206]"
               : "bg-black/40 text-white ring-1 ring-white/25"
           }`}
@@ -40,7 +40,33 @@ function VideoThumb({ tone, index }: { tone: VideoCard["tone"]; index: number })
   );
 }
 
-export default function TheaterIcons({ items }: { items: VideoCard[] }) {
+function TheaterIconsSkeleton() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      <SectionHeader
+        title="أيقونات المسرح"
+        subtitle="أبرز الأعمال المسرحية التي شكلت وجدان المشاهد الكويتي"
+      />
+      <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="space-y-3">
+            <div className="aspect-video w-full animate-pulse rounded-xl bg-white/5" />
+            <div className="h-4 w-3/4 animate-pulse rounded bg-white/10" />
+            <div className="flex gap-3">
+              <div className="h-3 w-16 animate-pulse rounded bg-white/5" />
+              <div className="h-3 w-12 animate-pulse rounded bg-white/5" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default function TheaterIcons({ items, loading }: { items: Post[]; loading?: boolean }) {
+  if (loading) return <TheaterIconsSkeleton />;
+  if (!items.length) return null;
+
   return (
     <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <SectionHeader
@@ -70,7 +96,7 @@ export default function TheaterIcons({ items }: { items: VideoCard[] }) {
             className="group cursor-pointer"
           >
             <div className="relative">
-              <VideoThumb tone={item.tone} index={i} />
+              <VideoThumb item={item} index={i} />
               <span className="absolute bottom-2 right-2 rounded-md bg-black/70 px-1.5 py-0.5 font-display text-[11px] font-bold text-white">
                 {item.duration}
               </span>

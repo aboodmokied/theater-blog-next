@@ -9,7 +9,36 @@ const ICONS = {
   academy: IconAcademy,
 };
 
-export default function LegacyVision({ features }: { features: VisionFeature[] }) {
+function LegacyVisionSkeleton() {
+  return (
+    <section className="border-t border-surface-border/70 bg-surface/30">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-stretch gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+        <div className="relative order-2 overflow-hidden rounded-2xl lg:order-1">
+          <div className="aspect-[4/3] w-full animate-pulse lg:aspect-auto lg:h-full lg:min-h-[380px] rounded-2xl bg-white/5" />
+        </div>
+        <div className="order-1 flex flex-col justify-center text-right lg:order-2 space-y-6">
+          <div className="h-8 w-48 animate-pulse rounded bg-white/10" />
+          <div className="space-y-4">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="flex items-start gap-4 rounded-xl border border-surface-border bg-surface/60 p-5">
+                <div className="order-2 flex-1 space-y-2">
+                  <div className="h-5 w-3/4 animate-pulse rounded bg-white/10" />
+                  <div className="h-4 w-full animate-pulse rounded bg-white/5" />
+                </div>
+                <div className="order-1 size-11 shrink-0 animate-pulse rounded-lg bg-white/10" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function LegacyVision({ features, loading }: { features: VisionFeature[]; loading?: boolean }) {
+  if (loading) return <LegacyVisionSkeleton />;
+  if (!features.length) return null;
+
   return (
     <section className="border-t border-surface-border/70 bg-surface/30">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-stretch gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">

@@ -1,3 +1,12 @@
+export type Media = {
+  id: string;
+  url: string;
+  type: string;
+  postId: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type FeaturedStory = {
   id: string;
   eyebrow: string;
@@ -8,13 +17,19 @@ export type FeaturedStory = {
   secondaryCta: string;
 };
 
-export type VideoCard = {
-  id: string;
+export type Post = {
+  id: number;
   title: string;
-  duration: string;
-  timeAgo: string;
-  views: string;
-  tone: "gold" | "neutral";
+  content?: string;
+  type: "video" | "article";
+  published: boolean;
+  duration?: string;
+  timeAgo?: string;
+  views?: string;
+  tone?: "gold" | "neutral";
+  media: Media[];
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type VisionFeature = {

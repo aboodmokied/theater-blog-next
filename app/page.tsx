@@ -8,28 +8,26 @@ import LegacyVision from "@/components/LegacyVision";
 import TheatricalVisions from "@/components/TheatricalVisions";
 import Footer from "@/components/Footer";
 import {
-  featuredStory,
-  theaterIcons,
-  visionFeatures,
-  visionTiles,
-} from "@/lib/data";
-import { useState } from "react";
+  useFeaturedStory,
+  useVideoPosts,
+  useVisionFeatures,
+  useVisionTiles,
+} from "@/hooks/useDataFetching";
 
 export default function Home() {
-  const [ready] = useState(true);
+  const { data: featuredStory, loading: heroLoading } = useFeaturedStory();
+  const { data: videoPosts, loading: videosLoading } = useVideoPosts();
+  const { data: visionFeatures, loading: featuresLoading } = useVisionFeatures();
+  const { data: visionTiles, loading: tilesLoading } = useVisionTiles();
 
   return (
-    <TheatreSplash
-      ready={ready}
-      minDurationMs={1500} // ◄ تم تقليل الزمن هنا إلى ثانية ونصف
-      onComplete={() => console.log("Curtains up.")}
-    >
+    <TheatreSplash minDurationMs={1500}>
       <Navbar />
       <main className="flex-1">
-        <Hero story={featuredStory} />
-        <TheaterIcons items={theaterIcons} />
-        <LegacyVision features={visionFeatures} />
-        <TheatricalVisions tiles={visionTiles} />
+        <Hero story={featuredStory} loading={heroLoading} />
+        <TheaterIcons items={videoPosts} loading={videosLoading} />
+        <LegacyVision features={visionFeatures} loading={featuresLoading} />
+        <TheatricalVisions tiles={visionTiles} loading={tilesLoading} />
       </main>
       <Footer />
     </TheatreSplash>
