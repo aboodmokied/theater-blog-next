@@ -6,8 +6,14 @@ import {
   getPosts,
   getVisionFeatures,
   getVisionTiles,
+  getPost,
 } from "@/lib/api";
-import type { FeaturedStory, Post, VisionFeature, VisionTile } from "@/lib/types";
+import type {
+  FeaturedStory,
+  Post,
+  VisionFeature,
+  VisionTile,
+} from "@/lib/types";
 
 type UseApiResult<T> = {
   data: T;
@@ -17,7 +23,7 @@ type UseApiResult<T> = {
 
 function useApi<T>(
   fetcher: () => Promise<T>,
-  defaultValue: T
+  defaultValue: T,
 ): UseApiResult<T> {
   const [data, setData] = useState<T>(defaultValue);
   const [loading, setLoading] = useState(true);
@@ -51,7 +57,7 @@ function useApi<T>(
 export function useFeaturedStory() {
   return useApi(
     () => getFeaturedStories().then((r) => r[0] ?? null),
-    null as FeaturedStory | null
+    null as FeaturedStory | null,
   );
 }
 
@@ -65,4 +71,34 @@ export function useVisionFeatures() {
 
 export function useVisionTiles() {
   return useApi(getVisionTiles, [] as VisionTile[]);
+}
+
+export function usePost(id: number) {
+  const [data, setData] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(false);
+    getPost(id)
+      .then((result) => {
+        if (!cancelled) {
+          setData(result);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setError(true);
+          setLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  return { data, loading, error };
 }

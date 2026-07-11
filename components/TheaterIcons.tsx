@@ -1,20 +1,25 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import SectionHeader from "./SectionHeader";
 import { IconEye, IconPlay } from "./icons";
 import type { Post } from "@/lib/types";
+import { mediaUrl } from "@/lib/api";
 
 function dummyThumbUrl(seed: number | string): string {
   return `https://picsum.photos/seed/${seed}/640/360`;
 }
 
-function VideoThumb({ item, index }: { item: Post; index: number }) {
-  const thumbnail = item.media?.find((m) => m.type === "image" || m.type === "thumbnail");
+// exported so the video page can reuse it for "related videos"
+export function VideoThumb({ item }: { item: Post; index?: number }) {
+  const thumbnail = item.media?.find(
+    (m) => m.type === "image" || m.type === "thumbnail",
+  );
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-xl">
       <img
-        src={thumbnail ? thumbnail.url : dummyThumbUrl(item.id)}
+        src={thumbnail ? mediaUrl(thumbnail.url) : dummyThumbUrl(item.id)}
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />
@@ -63,7 +68,13 @@ function TheaterIconsSkeleton() {
   );
 }
 
-export default function TheaterIcons({ items, loading }: { items: Post[]; loading?: boolean }) {
+export default function TheaterIcons({
+  items,
+  loading,
+}: {
+  items: Post[];
+  loading?: boolean;
+}) {
   if (loading) return <TheaterIconsSkeleton />;
   if (!items.length) return null;
 
@@ -84,7 +95,7 @@ export default function TheaterIcons({ items, loading }: { items: Post[]; loadin
         }}
         className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4"
       >
-        {items.map((item, i) => (
+        {items.map((item) => (
           <motion.article
             key={item.id}
             variants={{
@@ -95,22 +106,24 @@ export default function TheaterIcons({ items, loading }: { items: Post[]; loadin
             transition={{ duration: 0.35, ease: "easeOut" }}
             className="group cursor-pointer"
           >
-            <div className="relative">
-              <VideoThumb item={item} index={i} />
-              <span className="absolute bottom-2 right-2 rounded-md bg-black/70 px-1.5 py-0.5 font-display text-[11px] font-bold text-white">
-                {item.duration}
-              </span>
-            </div>
-            <h3 className="mt-3 line-clamp-1 text-right text-[15px] font-bold text-foreground transition-colors group-hover:text-gold-soft">
-              {item.title}
-            </h3>
-            <div className="mt-1.5 flex items-center justify-end gap-3 text-xs text-muted-2">
-              <span className="inline-flex items-center gap-1">
-                {item.views}
-                <IconEye className="h-3.5 w-3.5" />
-              </span>
-              <span>{item.timeAgo}</span>
-            </div>
+            <Link href={`/video/${item.id}`}>
+              <div className="relative">
+                <VideoThumb item={item} />
+                <span className="absolute bottom-2 right-2 rounded-md bg-black/70 px-1.5 py-0.5 font-display text-[11px] font-bold text-white">
+                  {item.duration}
+                </span>
+              </div>
+              <h3 className="mt-3 line-clamp-1 text-right text-[15px] font-bold text-foreground transition-colors group-hover:text-gold-soft">
+                {item.title}
+              </h3>
+              <div className="mt-1.5 flex items-center justify-end gap-3 text-xs text-muted-2">
+                <span className="inline-flex items-center gap-1">
+                  {item.views}
+                  <IconEye className="h-3.5 w-3.5" />
+                </span>
+                <span>{item.timeAgo}</span>
+              </div>
+            </Link>
           </motion.article>
         ))}
       </motion.div>

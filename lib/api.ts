@@ -7,9 +7,17 @@ import type {
   VisionTile,
 } from "./types";
 
+const API_ORIGIN = "http://localhost:3005";
+
 const http = axios.create({
-  baseURL: "http://localhost:3005/api",
+  baseURL: `${API_ORIGIN}/api`,
 });
+
+export function mediaUrl(path?: string): string | undefined {
+  if (!path) return undefined;
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  return `${API_ORIGIN}${path}`;
+}
 
 // ── Featured Stories ──────────────────────────────────────────
 
