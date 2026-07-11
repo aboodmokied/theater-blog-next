@@ -1,5 +1,6 @@
 import axios from "axios";
 import type {
+  AnalyticsData,
   FeaturedStory,
   Media,
   Post,
@@ -42,6 +43,10 @@ export function getPost(id: number): Promise<Post> {
   return http.get(`/posts/${id}`).then((r) => r.data);
 }
 
+export function trackView(postId: number, visitorId: string): Promise<{ views: number }> {
+  return http.post(`/posts/${postId}/view`, { visitorId }).then((r) => r.data);
+}
+
 // ── Vision Features ───────────────────────────────────────────
 
 export function getVisionFeatures(): Promise<VisionFeature[]> {
@@ -74,4 +79,28 @@ export function getMedia(id: string): Promise<Media> {
   return http.get(`/upload/${id}`).then((r) => r.data);
 }
 
-export type { FeaturedStory, Media, Post, VisionFeature, VisionTile };
+// ── Analytics ─────────────────────────────────────────────────
+
+export function sendHeartbeat(visitorId: string): Promise<void> {
+  return http.post("/analytics/heartbeat", { visitorId }).then(() => undefined);
+}
+
+export function getAnalytics(): Promise<AnalyticsData> {
+  return http.get("/analytics").then((r) => r.data);
+}
+
+// ── Visitor Cookie ────────────────────────────────────────────
+
+const VISITOR_COOKIE = "mb_vid";
+const COOKIE_DAYS = 365;
+
+export function getVisitorId(): string {
+  if (typeof document === "undefined") return "";
+  const match = document.cookie.match(new RegExp(`${VISITOR_COOKIE}=([^;]+)`));
+  if (match) return match[1];
+  const id = crypto.randomUUID();
+  document.cookie = `${VISITOR_COOKIE}=${id}; max-age=${COOKIE_DAYS * 86400}; path=/; SameSite=Lax`;
+  return id;
+}
+
+export type { FeaturedStory, Media, Post, VisionFeature, VisionTile, AnalyticsData };

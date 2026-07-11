@@ -47,7 +47,7 @@ export function VideoThumb({ item }: { item: Post; index?: number }) {
 
 function TheaterIconsSkeleton() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <section id="videos" className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <SectionHeader
         title="أيقونات المسرح"
         subtitle="أبرز الأعمال المسرحية التي شكلت وجدان المشاهد الكويتي"
@@ -79,7 +79,7 @@ export default function TheaterIcons({
   if (!items.length) return null;
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <section id="videos" className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <SectionHeader
         title="أيقونات المسرح"
         subtitle="أبرز الأعمال المسرحية التي شكلت وجدان المشاهد الكويتي"

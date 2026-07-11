@@ -40,7 +40,7 @@ export default function LegacyVision({ features, loading }: { features: VisionFe
   if (!features.length) return null;
 
   return (
-    <section className="border-t border-surface-border/70 bg-surface/30">
+    <section id="archive" className="border-t border-surface-border/70 bg-surface/30">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-stretch gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
         {/* Portrait — placeholder standing in for the archival photo */}
         <motion.div

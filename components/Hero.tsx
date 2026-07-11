@@ -63,7 +63,7 @@ export default function Hero({ story, loading }: { story: FeaturedStory | null; 
   if (!story) return null;
 
   return (
-    <section className="relative overflow-hidden" onMouseMove={handleMouseMove}>
+    <section id="hero" className="relative overflow-hidden" onMouseMove={handleMouseMove}>
       <div className="relative h-[800px] w-full overflow-hidden">
         {/* Background */}
 

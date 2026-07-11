@@ -7,7 +7,7 @@ import type { VisionTile } from "@/lib/types";
 
 function TheatricalVisionsSkeleton() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <section id="visions" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <SectionHeader title="رؤى مسرحية" align="center" />
       <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3 lg:gap-6">
         <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:col-span-1 lg:grid-cols-1 lg:gap-6">
@@ -29,7 +29,7 @@ export default function TheatricalVisions({ tiles, loading }: { tiles: VisionTil
   const large = tiles.find((t) => t.size === "large");
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <section id="visions" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <SectionHeader title="رؤى مسرحية" align="center" />
 
       <motion.div

@@ -62,7 +62,7 @@ export function useFeaturedStory() {
 }
 
 export function useVideoPosts() {
-  return useApi(() => getPosts({ type: "video" }), [] as Post[]);
+  return useApi(() => getPosts({ type: "video", published: "true" }), [] as Post[]);
 }
 
 export function useVisionFeatures() {

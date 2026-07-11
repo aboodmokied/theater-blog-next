@@ -2,11 +2,13 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { VideoThumb } from "@/components/TheaterIcons";
 import { IconEye } from "@/components/icons";
 import { Media, Post } from "@/lib/types";
 import { usePost, useVideoPosts } from "@/hooks/useDataFetching";
+import { useViewTracking } from "@/hooks/useAnalytics";
 import { mediaUrl } from "@/lib/api";
 
 function IconBack({ className }: { className?: string }) {
@@ -44,6 +46,18 @@ export default function VideoPage() {
 
   const { data: post, loading, error } = usePost(id);
   const { data: allVideos } = useVideoPosts();
+  const { onView, displayViews } = useViewTracking(id, post?.views ?? 0);
+  const viewTracked = useRef(false);
+
+  const handleTimeUpdate = useCallback(
+    (e: React.SyntheticEvent<HTMLVideoElement>) => {
+      if (!viewTracked.current && e.currentTarget.currentTime >= 5) {
+        viewTracked.current = true;
+        onView();
+      }
+    },
+    [onView],
+  );
 
   if (loading) return <VideoPageSkeleton />;
 
@@ -108,6 +122,7 @@ export default function VideoPage() {
               poster={mediaUrl(posterMedia?.url)}
               className="h-full w-full"
               src={mediaUrl(videoMedia.url)}
+              onTimeUpdate={handleTimeUpdate}
             />
           ) : (
             <div className="grid h-full w-full place-items-center text-sm text-muted-2">
@@ -134,9 +149,9 @@ export default function VideoPage() {
             </span>
           )}
           {post.timeAgo && <span>{post.timeAgo}</span>}
-          {post.views && (
+          {post.views !== undefined && (
             <span className="inline-flex items-center gap-1">
-              {post.views}
+              {displayViews}
               <IconEye className="h-3.5 w-3.5" />
             </span>
           )}
@@ -188,7 +203,7 @@ export default function VideoPage() {
                   </h3>
                   <div className="mt-1.5 flex items-center justify-end gap-3 text-xs text-muted-2">
                     <span className="inline-flex items-center gap-1">
-                      {item.views}
+                      {item.views ?? 0}
                       <IconEye className="h-3.5 w-3.5" />
                     </span>
                     <span>{item.timeAgo}</span>

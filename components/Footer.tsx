@@ -13,10 +13,10 @@ export default function Footer() {
     >
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-center sm:flex-row sm:text-right sm:px-6 lg:px-8">
         <p className="font-display text-base font-extrabold text-foreground">
-          مجلس <span className="text-gold">ديجيتال</span>
+          محمد <span className="text-gold">غلوم</span>
         </p>
         <p className="text-sm text-muted-2">
-          © {new Date().getFullYear()} مجلس ديجيتال. جميع الحقوق محفوظة.
+          © {new Date().getFullYear()} محمد غلوم. جميع الحقوق محفوظة.
         </p>
       </div>
     </motion.footer>

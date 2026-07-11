@@ -25,7 +25,7 @@ export type Post = {
   published: boolean;
   duration?: string;
   timeAgo?: string;
-  views?: string;
+  views?: number;
   tone?: "gold" | "neutral";
   media: Media[];
   createdAt: string;
@@ -46,4 +46,22 @@ export type VisionTile = {
   description: string;
   badge?: string;
   cta?: string;
+};
+
+export type AnalyticsData = {
+  onlineVisitors: number;
+  todayVisitors: number;
+  totalVisitors: number;
+  totalViews: number;
+  totalPosts: number;
+  mostViewedPosts: (Post & { media: Media[] })[];
+  recentVisitors: {
+    id: string;
+    visitorId: string;
+    startedAt: string;
+    lastSeenAt: string;
+    endedAt: string | null;
+  }[];
+  viewsPerDay: { date: string; count: number }[];
+  visitorsPerDay: { date: string; count: number }[];
 };
