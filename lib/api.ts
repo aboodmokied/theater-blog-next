@@ -8,7 +8,7 @@ import type {
   VisionTile,
 } from "./types";
 
-const API_ORIGIN = "http://localhost:3005";
+const API_ORIGIN = process.env.NEXT_PUBLIC_API_ORIGIN || "http://localhost:3005";
 
 const http = axios.create({
   baseURL: `${API_ORIGIN}/api`,
